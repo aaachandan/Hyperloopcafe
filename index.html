@@ -20,11 +20,11 @@
   body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9990;opacity:.4}
 
   /* NAV */
-  nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:24px 60px;display:flex;align-items:center;justify-content:space-between;transition:all .5s ease}
-  nav.scrolled{background:rgba(26,15,0,0.94);backdrop-filter:blur(20px);padding:16px 60px;border-bottom:1px solid var(--border)}
-  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:4px;color:var(--gold);text-decoration:none}
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:22px 60px;display:flex;flex-direction:column;align-items:center;gap:16px;transition:all .5s ease}
+  nav.scrolled{background:rgba(26,15,0,0.94);backdrop-filter:blur(20px);padding:14px 60px;border-bottom:1px solid var(--border)}
+  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:6px}
   .nav-logo span{color:var(--cream)}
-  .nav-links{display:flex;gap:36px;list-style:none}
+  .nav-links{display:flex;gap:34px;list-style:none;justify-content:center;flex-wrap:wrap}
   .nav-links a{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--smoke);text-decoration:none;transition:color .3s}
   .nav-links a:hover{color:var(--gold-light)}
   .nav-cta{background:var(--gold) !important;color:var(--espresso) !important;padding:10px 22px !important;font-weight:500 !important}
@@ -234,8 +234,13 @@
   @media(max-width:900px){
     .menu-grid{grid-template-columns:1fr 1fr}
     .footer-top{grid-template-columns:1fr 1fr}
-    nav{padding:18px 24px}
-    nav.scrolled{padding:14px 24px}
+    nav{padding:14px 20px}
+    nav.scrolled{padding:12px 20px}
+    .nav-links{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 0 4px;border-top:1px solid var(--border)}
+    .nav-links li{width:100%}
+    .nav-links a{display:flex;justify-content:center;align-items:center;text-align:center;font-size:9px;letter-spacing:2px;padding:10px 6px;border:1px solid var(--border);background:rgba(255,255,255,.04);border-radius:2px;color:var(--smoke);line-height:1.3;white-space:normal}
+    .nav-cta{padding:10px 6px !important}
+    .hide-mobile{display:none}
     .hero-content{padding-left:32px}
     .hero-visual{width:48%;opacity:.6}
     .menu-section,.cat-section,.contact-section,.testimonials{padding:80px 24px}
@@ -289,7 +294,7 @@
     </button>
     <div class="upi-box">
       <div class="upi-text">Pay via UPI</div>
-      <div class="upi-id">6265235775@upi</div>
+      <div class="upi-id">7587410836@hdfc</div>
       <button class="upi-copy" onclick="copyUPI()">Copy UPI ID</button>
     </div>
   </div>
@@ -309,7 +314,7 @@
     <li><a href="#noodles">Noodles & Rice</a></li>
     <li><a href="#starters">Starters</a></li>
     <li><a href="#desserts">Desserts</a></li>
-    <li><a href="#contact">Visit Us</a></li>
+    <li class="hide-mobile"><a href="#contact">Visit Us</a></li>
     <li><a href="#" onclick="togglePanel();return false;" class="nav-cta">Order Now</a></li>
   </ul>
 </nav>
@@ -679,7 +684,7 @@
         <div class="contact-icon">💳</div>
         <div>
           <div class="contact-label">UPI Payment</div>
-          <div class="contact-value">6265235775@upi</div>
+          <div class="contact-value">7587410836@hdfc</div>
         </div>
       </div>
     </div>
@@ -688,7 +693,7 @@
         <div class="contact-icon">⏱️</div>
         <div>
           <div class="contact-label">Wait Times</div>
-          <div class="contact-value">1–2 items → 5 min<br>3–5 items → 10 min<br>6–10 items → 15 min<br>10+ items → 20+ min</div>
+          <div class="contact-value">Estimated time: 30 minutes</div>
         </div>
       </div>
       <div class="contact-item">
@@ -819,7 +824,7 @@ const MENU = [
 ];
 
 const PHONE = '917888993700';
-const UPI = '6265235775@upi';
+const UPI = '7587410836@hdfc';
 const cart = {};
 
 // Build list sections
@@ -890,8 +895,7 @@ function refreshCartUI() {
       <div class="cart-item-price">₹${cart[n].qty*cart[n].price}</div>
     </div>`).join('');
   document.getElementById('cartTotal').textContent = `₹${total}`;
-  const eta = totalItems<=2?'~5 min':totalItems<=5?'~10 min':totalItems<=10?'~15 min':'~20+ min';
-  document.getElementById('cartEta').textContent = `${totalItems} item${totalItems>1?'s':''} · Est. wait: ${eta}`;
+  document.getElementById('cartEta').textContent = `${totalItems} item${totalItems>1?'s':''} · Est. wait: ~30 min`;
 }
 function togglePanel() {
   document.getElementById('orderPanel').classList.toggle('open');
@@ -902,8 +906,7 @@ function placeOrder() {
   let msg = `Hello HYPER LOOP Cafe & Bakery! 👋\n\nMy Order:\n`;
   let total=0, totalItems=0;
   names.forEach(n=>{const it=cart[n];totalItems+=it.qty;total+=it.qty*it.price;msg+=`• ${n} × ${it.qty} = ₹${it.qty*it.price}\n`;});
-  const eta = totalItems<=2?'5 min':totalItems<=5?'10 min':totalItems<=10?'15 min':'20+ min';
-  msg+=`\nTotal: ₹${total}\nEstimated wait: ${eta}\n\nPlease confirm my order. 🙏`;
+  msg+=`\nTotal: ₹${total}\nEstimated wait: 30 minutes\n\nPlease confirm my order. 🙏`;
   window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 function copyUPI(){
