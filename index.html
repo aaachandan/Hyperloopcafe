@@ -239,7 +239,7 @@
     .nav-links{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:14px 0 4px;border-top:1px solid var(--border)}
     .nav-links li{width:100%}
     .nav-links a{display:flex;justify-content:center;align-items:center;text-align:center;font-size:9px;letter-spacing:2px;padding:10px 6px;border:1px solid var(--border);background:rgba(255,255,255,.04);border-radius:2px;color:var(--smoke);line-height:1.3;white-space:normal}
-    .nav-cta{padding:10px 6px !important}
+    .nav-cta{padding:10px 6px !important;grid-column:1/-1}
     .hide-mobile{display:none}
     .hero-content{padding-left:32px}
     .hero-visual{width:48%;opacity:.6}
@@ -285,6 +285,14 @@
   </div>
   <div class="panel-footer" id="panelFooter" style="display:none">
     <div class="cart-total">
+      <div class="cart-total-label">Subtotal</div>
+      <div class="cart-total-amount" id="cartSubtotal">₹0</div>
+    </div>
+    <div class="cart-total">
+      <div class="cart-total-label">Home Delivery</div>
+      <div class="cart-total-amount" id="cartDelivery" style="font-size:18px;color:var(--gold)">FREE</div>
+    </div>
+    <div class="cart-total">
       <div class="cart-total-label">Total</div>
       <div class="cart-total-amount" id="cartTotal">₹0</div>
     </div>
@@ -311,6 +319,7 @@
   <ul class="nav-links">
     <li><a href="#drinks">Shakes</a></li>
     <li><a href="#pizzas">Pizzas</a></li>
+    <li><a href="#combos">Combos</a></li>
     <li><a href="#noodles">Noodles & Rice</a></li>
     <li><a href="#starters">Starters</a></li>
     <li><a href="#desserts">Desserts</a></li>
@@ -670,7 +679,7 @@
         <div class="contact-icon">📍</div>
         <div>
           <div class="contact-label">Address</div>
-          <div class="contact-value">Main Road, Pakhanjur<br>Chhattisgarh</div>
+          <div class="contact-value">Main Road, Near SBI ATM, Pakhanjore<br>Chhattisgarh</div>
         </div>
       </div>
       <div class="contact-item">
@@ -678,6 +687,13 @@
         <div>
           <div class="contact-label">WhatsApp Order</div>
           <div class="contact-value"><a href="https://wa.me/917888993700" target="_blank">+91 7888993700</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🛵</div>
+        <div>
+          <div class="contact-label">Home Delivery</div>
+          <div class="contact-value">FREE on orders above ₹500<br>₹30 for orders below ₹500</div>
         </div>
       </div>
       <div class="contact-item">
@@ -778,9 +794,8 @@ const MENU = [
     ['Combo 4 · Fried Rice + Manchurian + Shake + Paneer Burger',380,430]
   ]},
   {cat:'Pizzas', id:'pizzas', items:[
-    ...exp('Regular Veg Pizza',160,['Corn','Onion','Onion Tomato','Mix Veg','Capsicum','Achari Do Pyaza']),
+    ['Margherita Pizza',160],['Onion Capsicum Pizza',160],
     ...exp('Premium / Paneer Pizza',200,['Paneer','Corn Paneer','Mushroom']),
-    ['Margherita Pizza',160],['Onion Tomato Pizza',160],['Lapino Pizza',160],
     ['Paneer Tikka Pizza',200],['FarmHouse Pizza',200],['Cheese Corn Pizza',200],
     ['Paneer Chilli Pizza',200],['Volcano Pizza',200],['Cheese Burst Add-on',50]
   ]},
@@ -894,7 +909,10 @@ function refreshCartUI() {
       </div>
       <div class="cart-item-price">₹${cart[n].qty*cart[n].price}</div>
     </div>`).join('');
-  document.getElementById('cartTotal').textContent = `₹${total}`;
+  document.getElementById('cartSubtotal').textContent = `₹${total}`;
+  const delivery = total >= 500 ? 0 : 30;
+  document.getElementById('cartDelivery').textContent = delivery === 0 ? 'FREE' : `₹${delivery}`;
+  document.getElementById('cartTotal').textContent = `₹${total + delivery}`;
   document.getElementById('cartEta').textContent = `${totalItems} item${totalItems>1?'s':''} · Est. wait: ~30 min`;
 }
 function togglePanel() {
@@ -906,7 +924,9 @@ function placeOrder() {
   let msg = `Hello HYPER LOOP Cafe & Bakery! 👋\n\nMy Order:\n`;
   let total=0, totalItems=0;
   names.forEach(n=>{const it=cart[n];totalItems+=it.qty;total+=it.qty*it.price;msg+=`• ${n} × ${it.qty} = ₹${it.qty*it.price}\n`;});
-  msg+=`\nTotal: ₹${total}\nEstimated wait: 30 minutes\n\nPlease confirm my order. 🙏`;
+  msg+=`\nSubtotal: ₹${total}`;
+  const delivery = total >= 500 ? 0 : 30;
+  msg+=`\nHome Delivery: ${delivery === 0 ? 'FREE' : '₹30'}\nTotal: ₹${total + delivery}\nEstimated wait: 30 minutes\n\nPlease confirm my order. 🙏`;
   window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 function copyUPI(){
