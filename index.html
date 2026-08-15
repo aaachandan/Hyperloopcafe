@@ -216,6 +216,7 @@
   @keyframes loadPulse{0%,100%{opacity:1}50%{opacity:.4}}
   @keyframes loadBar{to{width:100%}}
   .loading-text{font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--smoke)}
+  .brand-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,3vw,28px);color:var(--gold-light);letter-spacing:1px;line-height:1.2}
 
   /* FOOD VIZ */
   .food-viz-1{background:linear-gradient(160deg,#4A1F08 0%,#8B4422 35%,#C17A35 60%,#6B3018 100%)}
@@ -261,6 +262,7 @@
 
 <div class="loading-screen" id="loader">
   <div class="loading-logo">HYPER<span>LOOP</span></div>
+  <div class="brand-tagline">Good Food · Good Mood</div>
   <div class="loading-bar-wrap"><div class="loading-bar"></div></div>
   <div class="loading-text">Crafting your experience</div>
 </div>
@@ -301,7 +303,8 @@
       <span>📱</span> Order via WhatsApp
     </button>
     <div class="upi-box">
-      <div class="upi-text">Pay via UPI</div>
+      <div class="upi-text">Pay via UPI — Scan & Pay</div>
+      <div id="upiQR" style="margin:12px auto;width:166px;height:166px;background:#fff;padding:8px"></div>
       <div class="upi-id">7587410836@hdfc</div>
       <button class="upi-copy" onclick="copyUPI()">Copy UPI ID</button>
     </div>
@@ -735,6 +738,7 @@
   <div class="footer-top">
     <div>
       <div class="footer-logo">HYPER<span>LOOP</span></div>
+      <div class="brand-tagline" style="margin-bottom:16px">Good Food · Good Mood</div>
       <p class="footer-brand-text">Pakhanjore's favourite cafe &amp; bakery. Fresh food, bold flavours, 100+ items. Order via WhatsApp.</p>
       <div style="margin-top:20px;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold)">Main Road, Near SBI ATM, Pakhanjore (C.G.)</div>
     </div>
@@ -775,6 +779,7 @@
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 // ===== REAL MENU DATA =====
 const SHAKE_FLAVORS = ['Strawberry','Blueberry','Mulberry','Kiwi','Cherry','Chocolate','Mango','Pineapple','Mixed Fruit','Vanilla','Butterscotch','Oreo','Banana','Sitaphal','Dry Fruit','Kesar Pista','Rasmalai','Paan','Watermelon','Apple','Black Currant','Coffee'];
@@ -794,10 +799,11 @@ const MENU = [
     ['Combo 4 · Fried Rice + Manchurian + Shake + Paneer Burger',380,430]
   ]},
   {cat:'Pizzas', id:'pizzas', items:[
-    ['Margherita Pizza',160],['Onion Capsicum Pizza',160],
+    ['Margherita Pizza',160],['Onion Capsicum Pizza',160],['Lapino Pizza',160],
     ...exp('Premium / Paneer Pizza',200,['Paneer','Corn Paneer','Mushroom']),
     ['Paneer Tikka Pizza',200],['FarmHouse Pizza',200],['Cheese Corn Pizza',200],
-    ['Paneer Chilli Pizza',200],['Volcano Pizza',200],['Cheese Burst Add-on',50]
+    ['Paneer Chilli Pizza',200],['Volcano Pizza',200],['Cheese Burst Add-on',50],
+    ['Extra Cheese Add-on',50]
   ]},
   {cat:'Noodles & Rice', id:'noodles', items:[
     ['Veg Hakka Noodles',100],['Veg Schezwan Noodles',120],['Paneer Noodles',130],
@@ -913,6 +919,18 @@ function refreshCartUI() {
   document.getElementById('cartDelivery').textContent = 'FREE ≤2km · ₹30 · 10km+ ₹100 (min ₹1000)';
   document.getElementById('cartTotal').textContent = `₹${total}`;
   document.getElementById('cartEta').textContent = `${totalItems} item${totalItems>1?'s':''} · Est. wait: ~30 min`;
+  renderQR(total);
+}
+function renderQR(amount) {
+  const box = document.getElementById('upiQR');
+  if(!box) return;
+  box.innerHTML = '';
+  const link = `upi://pay?pa=${UPI}&pn=Hyper%20Loop&am=${amount}&cu=INR&tn=Hyper%20Loop%20Order`;
+  if(typeof QRCode !== 'undefined'){
+    new QRCode(box,{text:link,width:150,height:150,colorDark:'#000000',colorLight:'#ffffff'});
+  }else{
+    box.innerHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(link)}" alt="UPI QR" style="width:150px;height:150px">`;
+  }
 }
 function togglePanel() {
   document.getElementById('orderPanel').classList.toggle('open');
