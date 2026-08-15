@@ -290,7 +290,7 @@
     </div>
     <div class="cart-total">
       <div class="cart-total-label">Home Delivery</div>
-      <div class="cart-total-amount" id="cartDelivery" style="font-size:18px;color:var(--gold)">FREE</div>
+      <div class="cart-total-amount" id="cartDelivery" style="font-size:11px;color:var(--gold);text-align:right">FREE ≤2km · ₹30 · 10km+ ₹100 (min ₹1000)</div>
     </div>
     <div class="cart-total">
       <div class="cart-total-label">Total</div>
@@ -693,7 +693,7 @@
         <div class="contact-icon">🛵</div>
         <div>
           <div class="contact-label">Home Delivery</div>
-          <div class="contact-value">FREE on orders above ₹500<br>₹30 for orders below ₹500</div>
+          <div class="contact-value">FREE up to 2 km<br>₹30 beyond 2 km<br>10+ km: min order ₹1000 + ₹100 delivery</div>
         </div>
       </div>
       <div class="contact-item">
@@ -910,9 +910,8 @@ function refreshCartUI() {
       <div class="cart-item-price">₹${cart[n].qty*cart[n].price}</div>
     </div>`).join('');
   document.getElementById('cartSubtotal').textContent = `₹${total}`;
-  const delivery = total >= 500 ? 0 : 30;
-  document.getElementById('cartDelivery').textContent = delivery === 0 ? 'FREE' : `₹${delivery}`;
-  document.getElementById('cartTotal').textContent = `₹${total + delivery}`;
+  document.getElementById('cartDelivery').textContent = 'FREE ≤2km · ₹30 · 10km+ ₹100 (min ₹1000)';
+  document.getElementById('cartTotal').textContent = `₹${total}`;
   document.getElementById('cartEta').textContent = `${totalItems} item${totalItems>1?'s':''} · Est. wait: ~30 min`;
 }
 function togglePanel() {
@@ -924,9 +923,7 @@ function placeOrder() {
   let msg = `Hello HYPER LOOP Cafe & Bakery! 👋\n\nMy Order:\n`;
   let total=0, totalItems=0;
   names.forEach(n=>{const it=cart[n];totalItems+=it.qty;total+=it.qty*it.price;msg+=`• ${n} × ${it.qty} = ₹${it.qty*it.price}\n`;});
-  msg+=`\nSubtotal: ₹${total}`;
-  const delivery = total >= 500 ? 0 : 30;
-  msg+=`\nHome Delivery: ${delivery === 0 ? 'FREE' : '₹30'}\nTotal: ₹${total + delivery}\nEstimated wait: 30 minutes\n\nPlease confirm my order. 🙏`;
+  msg+=`\nTotal: ₹${total}\nHome Delivery: FREE up to 2km, ₹30 beyond 2km, 10+ km: min order ₹1000 + ₹100 delivery\nEstimated wait: 30 minutes\n\nPlease confirm my order. 🙏`;
   PHONES.forEach((p,i)=>setTimeout(()=>window.open(`https://wa.me/${p}?text=${encodeURIComponent(msg)}`,'_blank'), i*400));
 }
 function copyUPI(){
