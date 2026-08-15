@@ -154,6 +154,8 @@
   .upi-id{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:2px}
   .upi-copy{background:transparent;border:1px solid var(--border);color:var(--smoke);padding:6px 16px;font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;margin-top:8px;font-family:'DM Sans',sans-serif;transition:all .3s;width:100%}
   .upi-copy:hover{background:var(--gold);color:var(--espresso);border-color:var(--gold)}
+  .upi-pay{width:100%;background:var(--gold);color:var(--espresso);border:none;padding:13px;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:700;transition:background .3s;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:12px}
+  .upi-pay:hover{background:var(--gold-light)}
 
   /* FLOATING CART */
   .floating-cart{position:fixed;bottom:36px;right:36px;z-index:1001;background:var(--gold);color:var(--espresso);width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;box-shadow:0 8px 30px rgba(196,147,58,.4);transition:all .3s;border:none}
@@ -309,6 +311,7 @@
       <div id="upiQR" style="margin:12px auto;width:166px;height:166px;background:#fff;padding:8px"></div>
       <div class="upi-id">7587410836@hdfc</div>
       <button class="upi-copy" onclick="copyUPI()">Copy UPI ID</button>
+      <button class="upi-pay" onclick="payNow()">💳 Pay Now</button>
     </div>
   </div>
 </div>
@@ -802,11 +805,11 @@ const MENU = [
     ['Combo 4 · Fried Rice + Manchurian + Shake + Paneer Burger',380,430]
   ]},
   {cat:'Pizzas', id:'pizzas', items:[
-    ['Margherita Pizza',160],['Onion Capsicum Pizza',160],['Lapino Pizza',160],
+    ['Cheese Burst Add-on',50],
     ...exp('Premium / Paneer Pizza',200,['Paneer','Corn Paneer','Mushroom']),
     ['Paneer Tikka Pizza',200],['FarmHouse Pizza',200],['Cheese Corn Pizza',200],
-    ['Paneer Chilli Pizza',200],['Volcano Pizza',200],['Cheese Burst Add-on',50],
-    ['Extra Cheese Add-on',50]
+    ['Paneer Chilli Pizza',200],['Volcano Pizza',200],
+    ['Margherita Pizza',160],['Onion Capsicum Pizza',160],['Lapino Pizza',160]
   ]},
   {cat:'Noodles & Rice', id:'noodles', items:[
     ['Veg Hakka Noodles',100],['Veg Schezwan Noodles',120],['Paneer Noodles',130],
@@ -850,6 +853,7 @@ const MENU = [
 const PHONES = ['917888993700','916266332007'];
 const UPI = '7587410836@hdfc';
 const cart = {};
+let currentTotal = 0;
 
 // Build list sections
 function buildLists() {
@@ -899,6 +903,7 @@ function changeQty(name, delta) {
 function refreshCartUI() {
   const names = Object.keys(cart);
   const total = names.reduce((s,n)=>s+cart[n].qty*cart[n].price,0);
+  currentTotal = total;
   const totalItems = names.reduce((s,n)=>s+cart[n].qty,0);
   document.getElementById('cartBadge').textContent = totalItems;
   const body = document.getElementById('panelBody');
@@ -949,6 +954,11 @@ function placeOrder() {
 }
 function copyUPI(){
   navigator.clipboard.writeText(UPI).then(()=>showNotif('UPI copied: ' + UPI));
+}
+function payNow(){
+  if(!currentTotal){alert('Please add items to cart first.');return;}
+  const link = `upi://pay?pa=${UPI}&pn=Hyper%20Loop&am=${currentTotal}&cu=INR&tn=Hyper%20Loop%20Order`;
+  window.location.href = link;
 }
 function showNotif(msg){
   const n=document.getElementById('notif');
