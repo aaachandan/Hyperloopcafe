@@ -686,7 +686,7 @@
         <div class="contact-icon">📱</div>
         <div>
           <div class="contact-label">WhatsApp Order</div>
-          <div class="contact-value"><a href="https://wa.me/917888993700" target="_blank">+91 7888993700</a></div>
+          <div class="contact-value"><a href="https://wa.me/917888993700" target="_blank">+91 7888993700</a><br><a href="https://wa.me/916266332007" target="_blank">+91 6266332007</a></div>
         </div>
       </div>
       <div class="contact-item">
@@ -838,7 +838,7 @@ const MENU = [
   ]}
 ];
 
-const PHONE = '917888993700';
+const PHONES = ['917888993700','916266332007'];
 const UPI = '7587410836@hdfc';
 const cart = {};
 
@@ -927,7 +927,7 @@ function placeOrder() {
   msg+=`\nSubtotal: ₹${total}`;
   const delivery = total >= 500 ? 0 : 30;
   msg+=`\nHome Delivery: ${delivery === 0 ? 'FREE' : '₹30'}\nTotal: ₹${total + delivery}\nEstimated wait: 30 minutes\n\nPlease confirm my order. 🙏`;
-  window.open(`https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`,'_blank');
+  PHONES.forEach((p,i)=>setTimeout(()=>window.open(`https://wa.me/${p}?text=${encodeURIComponent(msg)}`,'_blank'), i*400));
 }
 function copyUPI(){
   navigator.clipboard.writeText(UPI).then(()=>showNotif('UPI copied: ' + UPI));
