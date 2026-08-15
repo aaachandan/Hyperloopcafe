@@ -22,8 +22,9 @@
   /* NAV */
   nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:22px 60px;display:flex;flex-direction:column;align-items:center;gap:16px;transition:all .5s ease}
   nav.scrolled{background:rgba(26,15,0,0.94);backdrop-filter:blur(20px);padding:14px 60px;border-bottom:1px solid var(--border)}
-  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;color:var(--gold);text-decoration:none;display:flex;align-items:center;gap:6px}
-  .nav-logo span{color:var(--cream)}
+  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:5px;color:var(--gold);text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1}
+  .nav-logo-name span{color:var(--cream)}
+  .nav-logo-sub{font-family:'DM Sans',sans-serif;font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--smoke);margin-top:3px}
   .nav-links{display:flex;gap:34px;list-style:none;justify-content:center;flex-wrap:wrap}
   .nav-links a{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--smoke);text-decoration:none;transition:color .3s}
   .nav-links a:hover{color:var(--gold-light)}
@@ -323,7 +324,10 @@
 
 <!-- NAV -->
 <nav id="navbar">
-  <a href="#" class="nav-logo">HYPER<span>LOOP</span></a>
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-name">HYPER<span>LOOP</span></span>
+    <span class="nav-logo-sub">Cafe &amp; Bakery</span>
+  </a>
   <ul class="nav-links">
     <li><a href="#drinks">Shakes</a></li>
     <li><a href="#pizzas">Pizzas</a></li>
